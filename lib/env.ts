@@ -8,6 +8,7 @@ export const env = createEnv({
     AUTH_GITHUB_CLIENT_SECRET: z.string().min(1),
     BETTER_AUTH_SECRET: z.string().min(1),
     BETTER_AUTH_URL: z.string().url(),
+    RESEND_API_KEY: z.string().min(1),
   },
 
   // If you're using Next.js < 13.4.4, you'll need to specify the runtimeEnv manually
