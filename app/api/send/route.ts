@@ -1,4 +1,4 @@
-import { EmailTemplate } from "@/components/email-template";
+import { EmailTemplate } from "@/components/sidebar/email-template";
 import { env } from "@/lib/env";
 import { Resend } from "resend";
 
