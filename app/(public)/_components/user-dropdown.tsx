@@ -39,7 +39,9 @@ export default function UserDropdown({
         <Button variant="ghost" className="h-auto p-0 hover:bg-transparent">
           <Avatar>
             <AvatarImage src={image} alt="Profile image" />
-            <AvatarFallback>{name || "F N"}</AvatarFallback>
+            <AvatarFallback className="">
+              {name.charAt(0).toUpperCase()}
+            </AvatarFallback>
           </Avatar>
           <ChevronDownIcon
             size={16}
@@ -48,7 +50,7 @@ export default function UserDropdown({
           />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="max-w-64" align="center">
+      <DropdownMenuContent className="min-w-48" align="center">
         <DropdownMenuLabel className="flex min-w-0 flex-col">
           <span className="text-foreground truncate text-sm font-medium">
             {name}
