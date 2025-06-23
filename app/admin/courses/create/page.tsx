@@ -38,6 +38,8 @@ import {
   SelectTrigger,
 } from "@/components/ui/select";
 import RichTextEditor from "@/components/rich-text-editor/Editor";
+import Uploader from "@/components/file-uploader/Uploader";
+import Uploading from "@/components/file-uploader/Uploading";
 
 export default function CourseCreatePage() {
   const form = useForm<CourseSchemaType>({
@@ -163,7 +165,7 @@ export default function CourseCreatePage() {
                   <FormItem>
                     <FormLabel>Thumbnail image</FormLabel>
                     <FormControl>
-                      <Input placeholder="thumbnail url" {...field} />
+                      <Uploading />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
