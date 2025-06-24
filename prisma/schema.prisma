@@ -19,7 +19,7 @@ model User {
   updatedAt     DateTime
   sessions      Session[]
   accounts      Account[]
-  courses Course[]
+  courses       Course[]
 
   @@unique([email])
   @@map("user")
@@ -70,7 +70,7 @@ model Verification {
   @@map("verification")
 }
 
-model course {
+model Course {
   id String @id @default(uuid())
 
   title String

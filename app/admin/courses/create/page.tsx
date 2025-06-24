@@ -14,7 +14,7 @@ import {
   CourseSchemaType,
   courseStatus,
 } from "@/lib/zodSchema";
-import { ArrowLeft, PlusIcon, SparkleIcon } from "lucide-react";
+import { ArrowLeft, Loader2, PlusIcon, SparkleIcon } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 import { useForm } from "react-hook-form";
@@ -38,10 +38,16 @@ import {
   SelectTrigger,
 } from "@/components/ui/select";
 import RichTextEditor from "@/components/rich-text-editor/Editor";
-import Uploader from "@/components/file-uploader/Uploader";
+
 import Uploading from "@/components/file-uploader/Uploading";
+import { tryCatch } from "@/hooks/try-catch";
+import { CreateCourse } from "./actions";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export default function CourseCreatePage() {
+  const [isPending, startTransition] = React.useTransition();
+  const router = useRouter();
   const form = useForm<CourseSchemaType>({
     resolver: zodResolver(courseSchema),
     defaultValues: {
@@ -60,7 +66,21 @@ export default function CourseCreatePage() {
   function onSubmit(values: CourseSchemaType) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log(values);
+    startTransition(async () => {
+      const { data: result, error } = await tryCatch(CreateCourse(values));
+
+      if (error) {
+        toast.error(error.message);
+        return;
+      }
+      if (result.status === "success") {
+        toast.success(result.message);
+        form.reset();
+        router.push("/admin/courses");
+      } else if (result.status === "error") {
+        toast.error(result.message);
+      }
+    });
   }
   return (
     <>
@@ -165,7 +185,10 @@ export default function CourseCreatePage() {
                   <FormItem>
                     <FormLabel>Thumbnail image</FormLabel>
                     <FormControl>
-                      <Uploading />
+                      <Uploading
+                        onChange={field.onChange}
+                        value={field.value}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -284,8 +307,22 @@ export default function CourseCreatePage() {
                   </FormItem>
                 )}
               />
-              <Button className="w-full">
-                Create Course <PlusIcon className="ml-1 size-4" />
+              <Button
+                className="w-full"
+                type="submit"
+                disabled={isPending}
+                /*  onSubmit={form.handleSubmit(onSubmit)} */
+              >
+                {isPending ? (
+                  <>
+                    Creating...
+                    <Loader2 className="animate-spin ml-1 size-4" />
+                  </>
+                ) : (
+                  <>
+                    Create Course <PlusIcon className="ml-1 size-4" />
+                  </>
+                )}
               </Button>
             </form>
           </Form>
